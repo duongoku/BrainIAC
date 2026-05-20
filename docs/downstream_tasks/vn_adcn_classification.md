@@ -53,7 +53,7 @@ Change the configurations in `src/config_vn_fewshot_k_1.yml`, `src/config_vn_few
 ## Training
 
 ```bash
-python src/train_lightning_mci_stroke.py --config /path/to/one/of/the/above/config
+python src/train_lightning_mci.py --config /path/to/one/of/the/above/config
 ```
 
 ## Inference
