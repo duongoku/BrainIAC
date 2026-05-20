@@ -226,3 +226,4 @@ wandb/
 results/
 checkpoints/
 .vscode/
+generated_configs/
