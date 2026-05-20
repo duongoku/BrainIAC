@@ -24,7 +24,7 @@ from dataset import (BrainAgeDataset, MCIStrokeDataset, SequenceDataset, DualIma
 # =============================================================================
 
 # Model paths
-SIMCLR_CKPT_PATH = "/media/data/divyanshu/foundation_model/Brainiac_revision/checkpoints/simclr_vitb_checkpoints/brainiac_trainval32k_simclr_normandscaling_vitb_cls_normonly_biasbeforenorm_lr0005_best-model-epoch=18-train_loss=0.00.ckpt"
+SIMCLR_CKPT_PATH = "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/checkpoints/BrainIAC.ckpt"
 
 # Dataset configurations
 DATASETS = {
@@ -81,12 +81,41 @@ DATASETS = {
         "task_type": "regression",
         "image_type": "single",
         "num_classes": 1
+    },
+    "vn_task_linear_probing": {
+        "checkpoint_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/results/vn_checkpoints/vn_linear_probing_model-epoch-epoch=170-val_auc=0.76.ckpt",
+        "test_csv_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/csvs/vn_test.csv",
+        "root_dir": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/images",
+        "output_csv_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/results/vn_output_linear_probing.csv",
+        "task_type": "classification",
+        "image_type": "single",
+        "num_classes": 1
+    },
+    "vn_task_fewshot_k_1": {
+        "checkpoint_path": "/mnt/data_lab513/duongoku/brainiac_checkpoints/vn_fewshot_k_1_model-epoch-epoch=167-val_auc=0.76.ckpt",
+        "test_csv_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/csvs/vn_test.csv",
+        "root_dir": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/images",
+        "output_csv_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/results/vn_output_fewshot_k_1.csv",
+        "task_type": "classification",
+        "image_type": "single",
+        "num_classes": 1
+    },
+    "vn_task_fewshot_k_5": {
+        "checkpoint_path": "/mnt/data_lab513/duongoku/brainiac_checkpoints/vn_fewshot_k_5_model-epoch-epoch=94-val_auc=0.93.ckpt",
+        "test_csv_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/csvs/vn_test.csv",
+        "root_dir": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/images",
+        "output_csv_path": "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/results/vn_output_fewshot_k_5.csv",
+        "task_type": "classification",
+        "image_type": "single",
+        "num_classes": 1
     }
 }
 
 # Select which datasets to run inference on (use dataset keys from above)
 DATASETS_TO_RUN = [
-   "brainage_task"
+   "vn_task_linear_probing",
+   "vn_task_fewshot_k_1",
+   "vn_task_fewshot_k_5"
 ]
 
 # Data configuration
@@ -161,10 +190,11 @@ def create_test_dataset(csv_path, root_dir, image_type="quad", image_size=(96, 9
             dataset = BrainAgeDataset(csv_path=csv_path, root_dir=root_dir, transform=transform)
         elif "mci" in dataset_name or "stroke" in dataset_name:
             dataset = MCIStrokeDataset(csv_path=csv_path, root_dir=root_dir, transform=transform)
+        elif "vn" in dataset_name:
+            dataset = MCIStrokeDataset(csv_path=csv_path, root_dir=root_dir, transform=transform)
         elif "sequence" in dataset_name or "multiclass" in dataset_name:
             dataset = SequenceDataset(csv_path=csv_path, root_dir=root_dir, transform=transform)
         else:
-            
             dataset = BrainAgeDataset(csv_path=csv_path, root_dir=root_dir, transform=transform)
             print(f"Warning: Unknown single image task '{dataset_name}', using BrainAgeDataset")
         
@@ -503,7 +533,7 @@ def main():
             continue
     
     # Save metrics 
-    metrics_output_path = "inference/eval_results.json"
+    metrics_output_path = "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/results/eval_results.json"
     
     with open(metrics_output_path, 'w') as f:
         json.dump(all_metrics, f, indent=2)

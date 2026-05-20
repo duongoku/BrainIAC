@@ -1,0 +1,30 @@
+model:
+  max_epochs: 200
+
+data:
+  size: [96, 96, 96]
+  batch_size: 16
+  num_workers: 15
+  csv_file: "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/csvs/vn_train.csv"
+  val_csv: "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/csvs/vn_val.csv"
+  root_dir: "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/data/images"
+
+simclrvit:
+  ckpt_path: "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/checkpoints/BrainIAC.ckpt"
+
+optim:
+  lr: 0.001
+  momentum: 0.9
+  weight_decay: 0.0001
+
+logger:
+  save_dir: "/home2/duongoku/BrainIAC_ADCN/BrainIAC/src/results/vn_checkpoints"
+  save_name: "vn_linear_probing_model-epoch-{epoch:02d}-{val_auc:.2f}"
+  run_name_mci: "vn_linear_probing_experiment"
+  project_name_mci: "brainiac_vn_linear_probing"
+
+gpu:
+  visible_device: "0,1"
+
+train:
+  freeze: "yes"
